@@ -501,7 +501,7 @@ where
 {
     f(get_global())
 }
-
+#[allow(static_mut_refs)]
 #[inline(always)]
 pub(crate) fn get_global() -> &'static Dispatch {
     if GLOBAL_INIT.load(Ordering::Acquire) != INITIALIZED {

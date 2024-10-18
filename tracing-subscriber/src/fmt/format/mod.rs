@@ -1010,18 +1010,28 @@ where
         };
 
         if self.display_filename {
-            if let Some(filename) = meta.file() {
-                write!(
-                    writer,
-                    "{}{}{}",
-                    dimmed.paint(filename),
-                    dimmed.paint(":"),
-                    if line_number.is_some() { "" } else { " " }
-                )?;
+            match (meta.file(), line_number) {
+                (Some(filename), Some(line)) => {
+                    write!(
+                        writer,
+                        "{}{}{}:{} ",
+                        dimmed.paint(filename),
+                        dimmed.paint(":"),
+                        line,
+                        dimmed.suffix()
+                    )?
+                }
+                (Some(filename), None) => {
+                    write!(
+                        writer,
+                        "{}{} ",
+                        dimmed.paint(filename),
+                        dimmed.paint(":"),
+                    )?
+                }
+                _ => {}
             }
-        }
-
-        if let Some(line_number) = line_number {
+        } else if let Some(line_number) = line_number {
             write!(
                 writer,
                 "{}{}:{} ",
